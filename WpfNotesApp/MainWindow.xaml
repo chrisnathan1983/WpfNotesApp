@@ -1,0 +1,112 @@
+﻿<Window x:Class="WpfNotesApp.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:local="clr-namespace:WpfNotesApp"
+        xmlns:vm="clr-namespace:WpfNotesApp.ViewModels"
+        xmlns:ap="clr-namespace:WpfNotesApp.AttachedProperties"
+        Title="Notes" Height="600" Width="400" Background="#FF1E1E1E" Foreground="White">
+
+    <Window.Resources>
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="#FF2E2E2E"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FF444444"/>
+            <Setter Property="CaretBrush" Value="White"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Background" Value="#FF2E2E2E"/>
+            <Setter Property="Foreground" Value="White"/>
+            <Setter Property="BorderBrush" Value="#FF444444"/>
+            <Setter Property="Padding" Value="0"/>
+            <Setter Property="FontFamily" Value="Consolas"/>
+            <Setter Property="FontSize" Value="16"/>
+        </Style>
+
+        <Style TargetType="Border">
+            <Setter Property="BorderBrush" Value="#FF444444"/>
+        </Style>
+    </Window.Resources>
+
+    
+
+    <Window.DataContext>
+        <vm:MainWindowViewModel/>
+    </Window.DataContext>
+
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
+        </Grid.RowDefinitions>
+
+        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+            <ItemsControl ItemsSource="{Binding Notes}"
+                          AllowDrop="True"
+                          Drop="NotesItemsControl_Drop"
+                          PreviewMouseMove="NotesItemsControl_PreviewMouseMove">
+
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type vm:NoteViewModel}">
+                        <Border Background="#FF2E2E2E" BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="1" Margin="0,0,0,0"
+                                MouseEnter="NoteBorder_MouseEnter"
+                                MouseLeave="NoteBorder_MouseLeave"
+                                Tag="{Binding}">
+
+                            <Grid>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+
+                                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Visibility="{Binding PanelVisibility}">
+                                    <Button Background="#FF2E2E2E" BorderThickness="0" Width="20" ToolTip="Drag to reorder"
+                                            Cursor="SizeAll"
+                                            ap:DragBehavior.IsDragSource="True"
+                                            Tag="{Binding}">
+                                        <Image Width="16" Height="16" Source="{StaticResource DragIcon}"/>
+                                    </Button>
+
+                                    <Button BorderThickness="0" Width="20" ToolTip="Copy"
+                                            Command="{Binding DataContext.CopyNoteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}">
+                                        <Image Width="16" Height="16" Source="{StaticResource CopyIcon}"/>
+                                    </Button>
+                                </StackPanel>
+
+                                <TextBox Grid.Column="1"
+                                         Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
+                                         BorderThickness="0"
+                                         VerticalAlignment="Center"
+                                         TextWrapping="{Binding TextWrappingMode}"
+                                         AcceptsReturn="{Binding AcceptsReturnMode}"
+                                         Height="{Binding TextBoxHeight}"
+                                         MinHeight="24" />
+
+                                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding PanelVisibility}">
+                                    <Button BorderThickness="0" Width="20" ToolTip="Minimize"
+                                            Command="{Binding DataContext.ToggleMinimizeCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}"
+                                            Visibility="{Binding ShowMinimizeButton}">
+                                        <Image Width="16" Height="16" Source="{StaticResource MinimizeIcon}"/>
+                                    </Button>
+
+                                    <Button BorderThickness="0" Width="20" ToolTip="Delete"
+                                            Command="{Binding DataContext.DeleteNoteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}">
+                                        <Image Width="16" Height="16" Source="{StaticResource DeleteIcon}"/>
+                                    </Button>
+                                </StackPanel>
+                            </Grid>
+                        </Border>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+        </ScrollViewer>
+
+        <Button Grid.Row="1" Content="Create New Note" Command="{Binding CreateNewNoteCommand}" Margin="5" Height="50"/>
+    </Grid>
+</Window>
