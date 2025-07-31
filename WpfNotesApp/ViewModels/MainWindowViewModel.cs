@@ -18,6 +18,8 @@ namespace WpfNotesApp.ViewModels {
         public ICommand ToggleMinimizeCommand { get; private set; }
         public ICommand CopyNoteCommand { get; private set; } // New command for copying note text
 
+        public TrackerViewModel Tracker { get; set; } // Assuming you have a TrackerViewModel for the tracker
+
         public MainWindowViewModel() {
             // Initialize the collection
             Notes = new ObservableCollection<NoteViewModel>();
@@ -31,6 +33,8 @@ namespace WpfNotesApp.ViewModels {
             DeleteNoteCommand = new RelayCommand<NoteViewModel>(DeleteNote);
             ToggleMinimizeCommand = new RelayCommand<NoteViewModel>(ToggleMinimize);
             CopyNoteCommand = new RelayCommand<NoteViewModel>(CopyNote);
+
+            Tracker = new TrackerViewModel(); // Initialize the tracker view model
         }
 
         private void CreateNewNote(object parameter) {

@@ -23,6 +23,11 @@
             <Setter Property="Padding" Value="0"/>
             <Setter Property="FontFamily" Value="Consolas"/>
             <Setter Property="FontSize" Value="16"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Background" Value="Gold"/>
+                </Trigger>
+            </Style.Triggers>
         </Style>
 
         <Style TargetType="Border">
@@ -38,11 +43,14 @@
 
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
+        <local:TrackerView Grid.Row="0"  DataContext="{Binding Tracker}"/>
+
+        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
             <ItemsControl ItemsSource="{Binding Notes}"
                           AllowDrop="True"
                           Drop="NotesItemsControl_Drop"
@@ -69,12 +77,6 @@
                                             Tag="{Binding}">
                                         <Image Width="16" Height="16" Source="{StaticResource DragIcon}"/>
                                     </Button>
-
-                                    <Button BorderThickness="0" Width="20" ToolTip="Copy"
-                                            Command="{Binding DataContext.CopyNoteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}">
-                                        <Image Width="16" Height="16" Source="{StaticResource CopyIcon}"/>
-                                    </Button>
                                 </StackPanel>
 
                                 <TextBox Grid.Column="1"
@@ -94,6 +96,12 @@
                                         <Image Width="16" Height="16" Source="{StaticResource MinimizeIcon}"/>
                                     </Button>
 
+                                    <Button BorderThickness="0" Width="20" ToolTip="Copy"
+                                            Command="{Binding DataContext.CopyNoteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                                            CommandParameter="{Binding}">
+                                        <Image Width="16" Height="16" Source="{StaticResource CopyIcon}"/>
+                                    </Button>
+
                                     <Button BorderThickness="0" Width="20" ToolTip="Delete"
                                             Command="{Binding DataContext.DeleteNoteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
                                             CommandParameter="{Binding}">
@@ -107,6 +115,6 @@
             </ItemsControl>
         </ScrollViewer>
 
-        <Button Grid.Row="1" Content="Create New Note" Command="{Binding CreateNewNoteCommand}" Margin="5" Height="50"/>
+        <Button Grid.Row="2" Content="Create New Note" Command="{Binding CreateNewNoteCommand}" Margin="5" Height="50"/>
     </Grid>
 </Window>

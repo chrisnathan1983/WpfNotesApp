@@ -58,8 +58,12 @@
     <Compile Include="AttachedProperties\DragBehavior.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\ReferenceEqualityConverter.cs" />
+    <Compile Include="TrackerView.xaml.cs">
+      <DependentUpon>TrackerView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="ViewModels\MainWindowViewModel.cs" />
     <Compile Include="ViewModels\NoteViewModel.cs" />
+    <Compile Include="ViewModels\TrackerViewModel.cs" />
     <Page Include="Icons\Icons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
@@ -76,6 +80,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="TrackerView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Note.cs" />
