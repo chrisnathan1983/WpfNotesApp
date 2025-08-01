@@ -13,76 +13,10 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
         <local:TrackerView Grid.Row="0"  DataContext="{Binding Tracker}"/>
+        <local:NotesDisplay Grid.Row="1"/>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Notes}"
-                          AllowDrop="True"
-                          Drop="NotesItemsControl_Drop"
-                          PreviewMouseMove="NotesItemsControl_PreviewMouseMove">
-
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type vm:NoteViewModel}">
-                        <Border Background="#FF2E2E2E" BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="1" Margin="0,0,0,0"
-                                MouseEnter="NoteBorder_MouseEnter"
-                                MouseLeave="NoteBorder_MouseLeave"
-                                Tag="{Binding}">
-
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-
-                                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Visibility="{Binding PanelVisibility}">
-                                    <Button Width="20" ToolTip="Drag to reorder"
-                                            Cursor="SizeAll"
-                                            ap:DragBehavior.IsDragSource="True"
-                                            Tag="{Binding}">
-                                        <Image Width="16" Height="16" Source="{StaticResource DragIcon}"/>
-                                    </Button>
-                                </StackPanel>
-
-                                <TextBox Grid.Column="1"
-                                         Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
-                                         BorderThickness="0"
-                                         VerticalAlignment="Center"
-                                         TextWrapping="{Binding TextWrappingMode}"
-                                         AcceptsReturn="{Binding AcceptsReturnMode}"
-                                         Height="{Binding TextBoxHeight}"
-                                         MinHeight="24" />
-
-                                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding PanelVisibility}">
-                                    <Button Width="20" ToolTip="Minimize"
-                                            Command="{Binding DataContext.ToggleMinimizeCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}"
-                                            Visibility="{Binding ShowMinimizeButton}">
-                                        <Image Width="16" Height="16" Source="{StaticResource MinimizeIcon}"/>
-                                    </Button>
-
-                                    <Button Width="20" ToolTip="Copy"
-                                            Command="{Binding DataContext.CopyNoteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}">
-                                        <Image Width="16" Height="16" Source="{StaticResource CopyIcon}"/>
-                                    </Button>
-
-                                    <Button Width="20" ToolTip="Delete"
-                                            Command="{Binding DataContext.DeleteNoteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}">
-                                        <Image Width="16" Height="16" Source="{StaticResource DeleteIcon}"/>
-                                    </Button>
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
-
-        <Button Grid.Row="2" BorderThickness="1" Content="Create New Note" Command="{Binding CreateNewNoteCommand}" Margin="5" Height="50"/>
     </Grid>
 </Window>
