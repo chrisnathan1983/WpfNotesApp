@@ -19,7 +19,6 @@
                  VerticalAlignment="Center"
                  Margin="5"
                  Padding="5"
-                 Style="{StaticResource {x:Type TextBox}}">
             <TextBox.InputBindings>
                 <KeyBinding Key="Enter" Command="{Binding NewNoteEnterKeyCommand}" />
             </TextBox.InputBindings>
