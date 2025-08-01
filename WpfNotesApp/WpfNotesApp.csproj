@@ -56,6 +56,7 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Compile Include="AttachedProperties\DragBehavior.cs" />
+    <Compile Include="AttachedProperties\FocusBehavior.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\ReferenceEqualityConverter.cs" />
     <Compile Include="NotesDisplay.xaml.cs">

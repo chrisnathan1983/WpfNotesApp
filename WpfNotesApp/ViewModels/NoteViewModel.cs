@@ -7,6 +7,7 @@ namespace WpfNotesApp.ViewModels {
     public class NoteViewModel : INotifyPropertyChanged {
         private Note _note;
         private bool _isHovered; // New property to track hover state
+        private bool _isFocused; // New property to track focus state
 
         public NoteViewModel(Note note) {
             _note = note;
@@ -48,6 +49,16 @@ namespace WpfNotesApp.ViewModels {
                     _isHovered = value;
                     OnPropertyChanged(nameof(IsHovered));
                     OnPropertyChanged(nameof(PanelVisibility)); // Notify that visibility might change
+                }
+            }
+        }
+
+        public bool IsFocused {
+            get => _isFocused;
+            set {
+                if (_isFocused != value) {
+                    _isFocused = value;
+                    OnPropertyChanged(nameof(IsFocused));
                 }
             }
         }
