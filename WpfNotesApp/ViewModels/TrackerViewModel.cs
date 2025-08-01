@@ -70,10 +70,6 @@ namespace WpfNotesApp.ViewModels {
             DecreaseChildrenCommand = new RelayCommand(_ => { if (ChildrenCount > 0) ChildrenCount--; });
             IncreaseArrivalsCommand = new RelayCommand(_ => ArrivalsCount++);
             DecreaseArrivalsCommand = new RelayCommand(_ => { if (ArrivalsCount > 0) ArrivalsCount--; });
-            RoomsSoldCount = 30;
-            AdultsCount = 45;
-            ChildrenCount = 0;
-            ArrivalsCount = 20;
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

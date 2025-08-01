@@ -9,7 +9,7 @@ using System.Windows.Input;
 using WpfNotesApp.Models;
 
 namespace WpfNotesApp.ViewModels {
-    internal class NotesDisplayViewModel : INotifyPropertyChanged {
+    public class NotesDisplayViewModel : INotifyPropertyChanged {
         // This collection will be bound to your ItemsControl in MainWindow.xaml
         public ObservableCollection<NoteViewModel> Notes { get; set; }
 
@@ -23,10 +23,6 @@ namespace WpfNotesApp.ViewModels {
         public NotesDisplayViewModel() {
             // Initialize the collection
             Notes = new ObservableCollection<NoteViewModel>();
-
-            // Initialize sample notes
-            Notes.Add(new NoteViewModel(new Note { Text = "First note\nwith new line\nwith new line\nwith new line\nwith new line", IsMinimized = false }));
-            Notes.Add(new NoteViewModel(new Note { Text = "Second note", IsMinimized = false }));
 
             // Initialize commands
             CreateNewNoteCommand = new RelayCommand(CreateNewNote);

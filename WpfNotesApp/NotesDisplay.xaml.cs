@@ -22,7 +22,7 @@ namespace WpfNotesApp {
     public partial class NotesDisplay : UserControl {
         public NotesDisplay() {
             InitializeComponent();
-            DataContext = new NotesDisplayViewModel();
+            //DataContext = new NotesDisplayViewModel();
         }
 
 
@@ -88,7 +88,7 @@ namespace WpfNotesApp {
                 NoteViewModel targetNote = (dropTarget as Border)?.Tag as NoteViewModel; // <-- Fix is here
 
                 if (droppedNote != null && targetNote != null && droppedNote != targetNote) {
-                    var viewModel = DataContext as MainWindowViewModel;
+                    var viewModel = DataContext as NotesDisplayViewModel;
                     if (viewModel != null) {
                         int oldIndex = viewModel.Notes.IndexOf(droppedNote);
                         int newIndex = viewModel.Notes.IndexOf(targetNote);

@@ -16,7 +16,7 @@
         </Grid.RowDefinitions>
 
         <local:TrackerView Grid.Row="0"  DataContext="{Binding Tracker}"/>
-        <local:NotesDisplay Grid.Row="1"/>
+        <local:NotesDisplay Grid.Row="1" DataContext="{Binding NotesDisplay}"/>
 
     </Grid>
 </Window>
