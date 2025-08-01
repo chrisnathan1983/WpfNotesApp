@@ -14,7 +14,7 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <ScrollViewer Grid.Row="0" VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding DataContext.Notes}"
+            <ItemsControl ItemsSource="{Binding Notes}"
                           AllowDrop="True"
                           Drop="NotesItemsControl_Drop"
                           PreviewMouseMove="NotesItemsControl_PreviewMouseMove">
