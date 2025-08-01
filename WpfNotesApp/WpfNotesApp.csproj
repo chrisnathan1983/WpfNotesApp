@@ -59,6 +59,7 @@
     <Compile Include="AttachedProperties\FocusBehavior.cs" />
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\ReferenceEqualityConverter.cs" />
+    <Compile Include="Converters\StringIsNullOrEmptyConverter.cs" />
     <Compile Include="NotesDisplay.xaml.cs">
       <DependentUpon>NotesDisplay.xaml</DependentUpon>
     </Compile>

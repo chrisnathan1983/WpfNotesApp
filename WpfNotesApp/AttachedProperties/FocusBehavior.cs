@@ -1,4 +1,6 @@
 ﻿using System.Windows;
+using System.Windows.Controls;
+using System.Windows.Threading;
 
 namespace WpfNotesApp.AttachedProperties {
     public static class FocusBehavior {
@@ -21,10 +23,23 @@ namespace WpfNotesApp.AttachedProperties {
             UIElement element = d as UIElement;
             if (element != null && (bool)e.NewValue) {
                 element.Focus();
-                // Reset the property to false to prevent future unintended focus
-                element.Dispatcher.BeginInvoke(
-                    new System.Action(() => SetFocusOnLoad(element, false)),
-                    System.Windows.Threading.DispatcherPriority.Input);
+
+                // If the element is a TextBox, move the cursor to the end of the text.
+                if (element is TextBox textBox) {
+                    // Use Dispatcher.BeginInvoke to ensure the action is performed after the UI has been updated.
+                    textBox.Dispatcher.BeginInvoke(
+                        new System.Action(() => {
+                            textBox.CaretIndex = textBox.Text.Length;
+                            SetFocusOnLoad(element, false); // Reset the property to prevent unintended focus changes later
+                        }),
+                        DispatcherPriority.Input);
+                }
+                else {
+                    // For other elements, just reset the property immediately.
+                    element.Dispatcher.BeginInvoke(
+                        new System.Action(() => SetFocusOnLoad(element, false)),
+                        DispatcherPriority.Input);
+                }
             }
         }
     }

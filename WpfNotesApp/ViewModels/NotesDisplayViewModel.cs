@@ -53,7 +53,7 @@ namespace WpfNotesApp.ViewModels {
         private void CreateNoteFromTextBox(object parameter) {
             if (!string.IsNullOrWhiteSpace(NewNoteText)) {
                 var newNote = new NoteViewModel(new Note { Text = NewNoteText, IsMinimized = false });
-                Notes.Add(newNote);
+                Notes.Insert(0, newNote);
                 NewNoteText = ""; // Clear the textbox after creating a note
                 newNote.IsFocused = true; // Set focus on the new note
             }
