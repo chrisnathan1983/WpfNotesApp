@@ -20,14 +20,14 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Button Grid.Column="0" Content="-" BorderThickness="0" 
+                    <Button Grid.Column="0" Content="-" 
                             Command="{Binding DecreaseRoomsSoldCommand}"/>
                     <StackPanel Grid.Column="1"  Orientation="Vertical" HorizontalAlignment="Center">
-                        <TextBox Grid.Row="0" Width="Auto" BorderThickness="0" FontSize="45" FontWeight="Bold" HorizontalAlignment="Center" 
+                        <TextBox Grid.Row="0" Width="Auto" FontSize="45" FontWeight="Bold" HorizontalAlignment="Center" 
                                  Text="{Binding RoomsSoldCount}" />
                         <TextBlock Grid.Row="1" Text="Rooms Sold" HorizontalAlignment="Center"/>
                     </StackPanel>
-                    <Button Grid.Column="2" Content="+" BorderThickness="0" 
+                    <Button Grid.Column="2" Content="+"
                             Command="{Binding IncreaseRoomsSoldCommand}"/>
                 </Grid>
             </Border>
@@ -45,14 +45,14 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <Button Grid.Column="0" Content="-" BorderThickness="0" 
+                        <Button Grid.Column="0" Content="-" 
                             Command="{Binding DecreaseAdultsCommand}"/>
                         <StackPanel Grid.Column="1"  Orientation="Vertical" HorizontalAlignment="Center">
-                            <TextBox Grid.Row="0" Width="Auto" BorderThickness="0" FontWeight="Bold" HorizontalAlignment="Center" 
+                            <TextBox Grid.Row="0" Width="Auto" FontWeight="Bold" HorizontalAlignment="Center" 
                                  Text="{Binding AdultsCount}" />
                             <TextBlock Grid.Row="1" Text="Adults" HorizontalAlignment="Center"/>
                         </StackPanel>
-                        <Button Grid.Column="2" Content="+" BorderThickness="0" 
+                        <Button Grid.Column="2" Content="+"
                             Command="{Binding IncreaseAdultsCommand}"/>
                     </Grid>
                 </Border>
@@ -68,14 +68,14 @@
                             <RowDefinition Height="Auto"/>
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
-                        <Button Grid.Column="0" Content="-" BorderThickness="0" 
+                        <Button Grid.Column="0" Content="-"
                             Command="{Binding DecreaseChildrenCommand}"/>
                         <StackPanel Grid.Column="1"  Orientation="Vertical" HorizontalAlignment="Center">
-                            <TextBox Grid.Row="0" Width="Auto" BorderThickness="0" FontWeight="Bold" HorizontalAlignment="Center" 
+                            <TextBox Grid.Row="0" Width="Auto" FontWeight="Bold" HorizontalAlignment="Center" 
                                  Text="{Binding ChildrenCount}" />
                             <TextBlock Grid.Row="1" Text="Child" HorizontalAlignment="Center"/>
                         </StackPanel>
-                        <Button Grid.Column="2" Content="+" BorderThickness="0"  
+                        <Button Grid.Column="2" Content="+"
                             Command="{Binding IncreaseChildrenCommand}"/>
                     </Grid>
                 </Border>
@@ -95,14 +95,14 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
-                    <Button Grid.Column="0" Content="-" BorderThickness="0"
+                    <Button Grid.Column="0" Content="-"
                             Command="{Binding DecreaseArrivalsCommand}"/>
                     <StackPanel Grid.Column="1"  Orientation="Vertical" HorizontalAlignment="Center">
-                        <TextBox Grid.Row="0" Width="Auto" BorderThickness="0" FontSize="45" FontWeight="Bold" HorizontalAlignment="Center" 
+                        <TextBox Grid.Row="0" Width="Auto" FontSize="45" FontWeight="Bold" HorizontalAlignment="Center" 
                                  Text="{Binding ArrivalsCount}" />
                         <TextBlock Grid.Row="1" Text="Arrivals" HorizontalAlignment="Center"/>
                     </StackPanel>
-                    <Button Grid.Column="2" Content="+" BorderThickness="0"  
+                    <Button Grid.Column="2" Content="+" 
                             Command="{Binding IncreaseArrivalsCommand}"/>
                 </Grid>
             </Border>
