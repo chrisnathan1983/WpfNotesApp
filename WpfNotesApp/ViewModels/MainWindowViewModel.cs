@@ -25,8 +25,26 @@ namespace WpfNotesApp.ViewModels {
                 if (_currentFileName != value) {
                     _currentFileName = value;
                     OnPropertyChanged(nameof(CurrentFileName));
+                    OnPropertyChanged(nameof(DisplayFileName));
                 }
             }
+        }
+
+        private bool _isUnsaved;
+        public bool IsUnsaved {
+            get => _isUnsaved;
+            set {
+                if (_isUnsaved != value) {
+                    _isUnsaved = value;
+                    OnPropertyChanged(nameof(IsUnsaved));
+                    OnPropertyChanged(nameof(DisplayFileName));
+                }
+            }
+        }
+
+        // New derived property
+        public string DisplayFileName {
+            get => IsUnsaved ? $"{CurrentFileName}*" : CurrentFileName;
         }
 
         // Commands for file operations
@@ -41,11 +59,20 @@ namespace WpfNotesApp.ViewModels {
             NotesDisplay.Notes.Add(new NoteViewModel(new Note { Text = "First note\nwith new line\nwith new line\nwith new line\nwith new line", IsMinimized = false }));
             NotesDisplay.Notes.Add(new NoteViewModel(new Note { Text = "Second note", IsMinimized = false }));
 
+            // Subscribe to events when the NotesDisplay is initialized
+            NotesDisplay.Notes.CollectionChanged += NotesCollection_CollectionChanged;
+            foreach (var note in NotesDisplay.Notes) {
+                note.PropertyChanged += Note_PropertyChanged;
+            }
+
             Tracker = new TrackerViewModel();
             Tracker.RoomsSoldCount = 30;
             Tracker.AdultsCount = 45;
             Tracker.ChildrenCount = 0;
             Tracker.ArrivalsCount = 20;
+
+            // Subscribe to Tracker property changes
+            Tracker.PropertyChanged += Tracker_PropertyChanged;
 
             // Initialize commands
             NewFileCommand = new RelayCommand(_ => NewFile());
@@ -56,6 +83,7 @@ namespace WpfNotesApp.ViewModels {
 
             // Set initial file name
             CurrentFileName = "File";
+            IsUnsaved = true;
         }
 
         private void NewFile() {
@@ -67,6 +95,7 @@ namespace WpfNotesApp.ViewModels {
             Tracker.ArrivalsCount = 0;
             _currentFilePath = null;
             CurrentFileName = "File";
+            IsUnsaved = false;
         }
 
         private void OpenFile() {
@@ -81,8 +110,10 @@ namespace WpfNotesApp.ViewModels {
 
                     if (lines.Length > 0) {
                         // Parse the first line for tracker data
+                        bool parsed = false;
                         string[] trackerParts = lines[0].Split(',');
                         if (trackerParts.Length == 4) {
+                            parsed = true;
                             Tracker.RoomsSoldCount = int.Parse(trackerParts[0].Split(' ')[0]);
                             Tracker.AdultsCount = int.Parse(trackerParts[1].Trim().Split(' ')[0]);
                             Tracker.ChildrenCount = int.Parse(trackerParts[2].Trim().Split(' ')[0]);
@@ -92,7 +123,7 @@ namespace WpfNotesApp.ViewModels {
                         // Clear existing notes and parse the rest of the file for notes
                         NotesDisplay.Notes.Clear();
                         // Join lines from the second line onwards, then split by double newline
-                        string notesContent = string.Join("\n", lines.Skip(2));
+                        string notesContent = parsed ? string.Join("\n", lines.Skip(2)) : string.Join("\n", lines);
                         string[] noteTexts = notesContent.Split(new string[] { "\n\n" }, System.StringSplitOptions.None);
 
                         foreach (var noteText in noteTexts) {
@@ -100,6 +131,7 @@ namespace WpfNotesApp.ViewModels {
                                 NotesDisplay.Notes.Add(new NoteViewModel(new Note { Text = noteText, IsMinimized = false }));
                             }
                         }
+                        IsUnsaved = false; // Reset unsaved state after loading
                     }
                     else {
                         // Handle empty file: clear everything
@@ -112,17 +144,17 @@ namespace WpfNotesApp.ViewModels {
             }
         }
 
-        private void SaveFile(bool saveAs) {
+        internal bool SaveFile(bool saveAs) {
             if (string.IsNullOrEmpty(_currentFilePath) || saveAs) {
                 SaveFileDialog saveFileDialog = new SaveFileDialog();
                 saveFileDialog.Filter = "Text files (*.txt)|*.txt|All files (*.*)|*.*";
-                saveFileDialog.FileName = CurrentFileName == "Untitled" ? "MyNotes" : CurrentFileName; // Suggest a default name
+                saveFileDialog.FileName = CurrentFileName == "File" ? "MyNotes" : CurrentFileName; // Suggest a default name
                 if (saveFileDialog.ShowDialog() == true) {
                     _currentFilePath = saveFileDialog.FileName;
                     CurrentFileName = Path.GetFileNameWithoutExtension(_currentFilePath);
                 }
                 else {
-                    return; // User cancelled save
+                    return false; // User cancelled save
                 }
             }
 
@@ -137,15 +169,69 @@ namespace WpfNotesApp.ViewModels {
                     // Combine and save to the file
                     string fileContent = $"{trackerData}\n\n{notesData}";
                     File.WriteAllText(_currentFilePath, fileContent);
+                    IsUnsaved = false; // Reset unsaved state after saving
+                    return true; // Indicate success
                 }
                 catch (Exception ex) {
                     MessageBox.Show($"Error saving file: {ex.Message}", "Error", MessageBoxButton.OK, MessageBoxImage.Error);
+                    return false; // Indicate failure
+                }
+            }
+            return false; // If no file path is set, return false
+        }
+        internal bool PromptToSaveAndExit() {
+            if (IsUnsaved) {
+                MessageBoxResult result = MessageBox.Show(
+                    "You have unsaved changes. Do you want to save before closing?",
+                    "Save Changes",
+                    MessageBoxButton.YesNoCancel,
+                    MessageBoxImage.Warning);
+
+                if (result == MessageBoxResult.Yes) {
+                    return SaveFile(false); // Only proceed if save is successful
+                }
+                else if (result == MessageBoxResult.No) {
+                    return true; // Discard changes and proceed
+                }
+                else {
+                    return false; // Cancel
+                }
+            }
+            return true; // No unsaved changes, so proceed
+        }
+
+        internal void ExitApplication() {
+            if (PromptToSaveAndExit()) {
+                Application.Current.Shutdown();
+            }
+        }
+
+        private void NotesCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
+            IsUnsaved = true;
+
+            // Also subscribe to new items and unsubscribe from old items
+            if (e.NewItems != null) {
+                foreach (NoteViewModel note in e.NewItems) {
+                    note.PropertyChanged += Note_PropertyChanged;
+                }
+            }
+
+            if (e.OldItems != null) {
+                foreach (NoteViewModel note in e.OldItems) {
+                    note.PropertyChanged -= Note_PropertyChanged;
                 }
             }
         }
 
-        private void ExitApplication() {
-            Application.Current.Shutdown();
+        private void Tracker_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+            // The only properties that change are the counts, so we can always set IsDirty to true
+            IsUnsaved = true;
+        }
+
+        private void Note_PropertyChanged(object sender, PropertyChangedEventArgs e) {
+            if (e.PropertyName == nameof(NoteViewModel.Text)) {
+                IsUnsaved = true;
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

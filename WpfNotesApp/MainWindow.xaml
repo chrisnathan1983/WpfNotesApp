@@ -4,7 +4,8 @@
         xmlns:local="clr-namespace:WpfNotesApp"
         xmlns:vm="clr-namespace:WpfNotesApp.ViewModels"
         xmlns:ap="clr-namespace:WpfNotesApp.AttachedProperties"
-        Title="Notes" Height="600" Width="300" Background="#FF1E1E1E" Foreground="White">
+        Title="Notes" Height="600" Width="300" Background="#FF1E1E1E" Foreground="White"
+        Closing="Window_Closing">
     
     <Window.DataContext>
         <vm:MainWindowViewModel/>
@@ -13,16 +14,11 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
-            <!-- For the menu -->
             <RowDefinition Height="Auto"/>
-            <!-- For the TrackerView -->
             <RowDefinition Height="*"/>
-            <!-- For the NotesDisplay -->
         </Grid.RowDefinitions>
-
-        <local:FileMenuView Grid.Row="0" />
-        <local:TrackerView Grid.Row="1"  DataContext="{Binding Tracker}"/>
+        <local:FileMenuView Grid.Row="0"/>
+        <local:TrackerView Grid.Row="1" DataContext="{Binding Tracker}"/>
         <local:NotesDisplay Grid.Row="2" DataContext="{Binding NotesDisplay}"/>
-        
     </Grid>
 </Window>

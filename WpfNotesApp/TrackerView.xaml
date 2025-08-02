@@ -7,17 +7,17 @@
              xmlns:viewmodels="clr-namespace:WpfNotesApp.ViewModels" 
              d:DataContext="{d:DesignInstance Type=viewmodels:TrackerViewModel}"
              mc:Ignorable="d" >
-    <Border BorderBrush="#FF444444" BorderThickness="0,0,0,1" Padding="2,2,2,2">
+    <Border BorderBrush="#FF444444" BorderThickness="0,0,0,0" Padding="2,2,2,2">
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
             <Border CornerRadius="10" Background="#FF2E2E2E" BorderBrush="#FF444444" BorderThickness="1">
                 <Grid Margin="2,2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="20"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="20"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Button Grid.Column="0" Content="-" 
@@ -25,7 +25,7 @@
                     <StackPanel Grid.Column="1"  Orientation="Vertical" HorizontalAlignment="Center">
                         <TextBox Grid.Row="0" Width="Auto" FontSize="45" FontWeight="Bold" HorizontalAlignment="Center" 
                                  Text="{Binding RoomsSoldCount}" />
-                        <TextBlock Grid.Row="1" Text="Rooms Sold" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Row="1" Text="RMS" HorizontalAlignment="Center"/>
                     </StackPanel>
                     <Button Grid.Column="2" Content="+"
                             Command="{Binding IncreaseRoomsSoldCommand}"/>
@@ -34,11 +34,11 @@
             
             <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
 
-                <Border CornerRadius="10" Background="#FF2E2E2E" BorderBrush="#FF444444" BorderThickness="1" Margin="2,2,2,2">
+                <Border CornerRadius="10" Background="#FF2E2E2E" BorderBrush="#FF444444" BorderThickness="1" Margin="2,0,2,1">
                     <Grid Margin="2,2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="20"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="20"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
@@ -50,18 +50,18 @@
                         <StackPanel Grid.Column="1"  Orientation="Vertical" HorizontalAlignment="Center">
                             <TextBox Grid.Row="0" Width="Auto" FontWeight="Bold" HorizontalAlignment="Center" 
                                  Text="{Binding AdultsCount}" />
-                            <TextBlock Grid.Row="1" Text="Adults" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Row="1" Text="A" HorizontalAlignment="Center"/>
                         </StackPanel>
                         <Button Grid.Column="2" Content="+"
                             Command="{Binding IncreaseAdultsCommand}"/>
                     </Grid>
                 </Border>
 
-                <Border CornerRadius="10" Background="#FF2E2E2E" BorderBrush="#FF444444" BorderThickness="1" Margin="2,2,2,2">
+                <Border CornerRadius="10" Background="#FF2E2E2E" BorderBrush="#FF444444" BorderThickness="1" Margin="2,1,2,0">
                     <Grid Margin="2,2">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="20"/>
-                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="20"/>
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
@@ -73,7 +73,7 @@
                         <StackPanel Grid.Column="1"  Orientation="Vertical" HorizontalAlignment="Center">
                             <TextBox Grid.Row="0" Width="Auto" FontWeight="Bold" HorizontalAlignment="Center" 
                                  Text="{Binding ChildrenCount}" />
-                            <TextBlock Grid.Row="1" Text="Child" HorizontalAlignment="Center"/>
+                            <TextBlock Grid.Row="1" Text="C" HorizontalAlignment="Center"/>
                         </StackPanel>
                         <Button Grid.Column="2" Content="+"
                             Command="{Binding IncreaseChildrenCommand}"/>
@@ -88,11 +88,11 @@
                 <Grid Margin="2,2">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="20"/>
-                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="20"/>
                     </Grid.ColumnDefinitions>
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
                         <RowDefinition Height="Auto"/>
                     </Grid.RowDefinitions>
                     <Button Grid.Column="0" Content="-"
@@ -100,7 +100,7 @@
                     <StackPanel Grid.Column="1"  Orientation="Vertical" HorizontalAlignment="Center">
                         <TextBox Grid.Row="0" Width="Auto" FontSize="45" FontWeight="Bold" HorizontalAlignment="Center" 
                                  Text="{Binding ArrivalsCount}" />
-                        <TextBlock Grid.Row="1" Text="Arrivals" HorizontalAlignment="Center"/>
+                        <TextBlock Grid.Row="1" Text="RES" HorizontalAlignment="Center"/>
                     </StackPanel>
                     <Button Grid.Column="2" Content="+" 
                             Command="{Binding IncreaseArrivalsCommand}"/>

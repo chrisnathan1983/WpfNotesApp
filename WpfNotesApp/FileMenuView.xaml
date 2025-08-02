@@ -6,7 +6,7 @@
              xmlns:local="clr-namespace:WpfNotesApp"
              mc:Ignorable="d" >
     <Menu Background="#FF2E2E2E" Foreground="White">
-        <MenuItem Header="{Binding CurrentFileName}">
+        <MenuItem Header="{Binding DisplayFileName}">
             <MenuItem.HeaderTemplate>
                 <DataTemplate>
                     <TextBlock Text="{Binding}" FontWeight="Bold"/>
