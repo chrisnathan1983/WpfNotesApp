@@ -38,4 +38,19 @@
   <Style TargetType="Border">
     <Setter Property="BorderBrush" Value="#FF444444"/>
   </Style>
+  <!-- New Style for MenuItem -->
+  <Style TargetType="MenuItem">
+    <Setter Property="Background" Value="#FF2E2E2E"/>
+    <Setter Property="Foreground" Value="White"/>
+    <Setter Property="BorderBrush" Value="#FF444444"/>
+    <Setter Property="Padding" Value="5,2"/>
+    <Style.Triggers>
+      <Trigger Property="IsHighlighted" Value="True">
+        <Setter Property="Background" Value="#FF3E3E3E"/>
+      </Trigger>
+      <Trigger Property="IsEnabled" Value="False">
+        <Setter Property="Foreground" Value="#FF888888"/>
+      </Trigger>
+    </Style.Triggers>
+  </Style>
 </ResourceDictionary>
