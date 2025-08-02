@@ -55,7 +55,7 @@ namespace WpfNotesApp.ViewModels {
             ExitApplicationCommand = new RelayCommand(_ => ExitApplication());
 
             // Set initial file name
-            CurrentFileName = "Untitled";
+            CurrentFileName = "File";
         }
 
         private void NewFile() {
@@ -66,7 +66,7 @@ namespace WpfNotesApp.ViewModels {
             Tracker.ChildrenCount = 0;
             Tracker.ArrivalsCount = 0;
             _currentFilePath = null;
-            CurrentFileName = "Untitled";
+            CurrentFileName = "File";
         }
 
         private void OpenFile() {

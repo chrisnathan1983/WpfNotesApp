@@ -61,6 +61,9 @@
     <Compile Include="Commands\RelayCommand.cs" />
     <Compile Include="Converters\ReferenceEqualityConverter.cs" />
     <Compile Include="Converters\StringIsNullOrEmptyConverter.cs" />
+    <Compile Include="FileMenuView.xaml.cs">
+      <DependentUpon>FileMenuView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="NotesDisplay.xaml.cs">
       <DependentUpon>NotesDisplay.xaml</DependentUpon>
     </Compile>
@@ -71,6 +74,10 @@
     <Compile Include="ViewModels\NotesDisplayViewModel.cs" />
     <Compile Include="ViewModels\NoteViewModel.cs" />
     <Compile Include="ViewModels\TrackerViewModel.cs" />
+    <Page Include="FileMenuView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Icons\Icons.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>

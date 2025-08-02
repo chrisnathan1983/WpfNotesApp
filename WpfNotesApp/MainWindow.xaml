@@ -4,7 +4,8 @@
         xmlns:local="clr-namespace:WpfNotesApp"
         xmlns:vm="clr-namespace:WpfNotesApp.ViewModels"
         xmlns:ap="clr-namespace:WpfNotesApp.AttachedProperties"
-        Title="Notes" Height="600" Width="400" Background="#FF1E1E1E" Foreground="White">
+        Title="Notes" Height="600" Width="300" Background="#FF1E1E1E" Foreground="White">
+    
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
@@ -19,44 +20,9 @@
             <!-- For the NotesDisplay -->
         </Grid.RowDefinitions>
 
-        <!-- File Menu -->
-        <Menu Grid.Row="0" Background="#FF2E2E2E" Foreground="White">
-            <MenuItem Header="{Binding CurrentFileName}">
-                <MenuItem.HeaderTemplate>
-                    <DataTemplate>
-                        <TextBlock Text="{Binding}" FontWeight="Bold"/>
-                    </DataTemplate>
-                </MenuItem.HeaderTemplate>
-                <MenuItem Header="New" Command="{Binding NewFileCommand}">
-                    <MenuItem.Icon>
-                        <Image Source="{StaticResource NewFile}" Width="16" Height="16"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Open..." Command="{Binding OpenFileCommand}">
-                    <MenuItem.Icon>
-                        <Image Source="{StaticResource OpenFile}" Width="16" Height="16"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Save" Command="{Binding SaveFileCommand}">
-                    <MenuItem.Icon>
-                        <Image Source="{StaticResource SaveFile}" Width="16" Height="16"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <MenuItem Header="Save As..." Command="{Binding SaveFileAsCommand}">
-                    <MenuItem.Icon>
-                        <Image Source="{StaticResource SaveFileAs}" Width="16" Height="16"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-                <Separator/>
-                <MenuItem Header="Exit" Command="{Binding ExitApplicationCommand}">
-                    <MenuItem.Icon>
-                        <Image Source="{StaticResource CloseFile}" Width="16" Height="16"/>
-                    </MenuItem.Icon>
-                </MenuItem>
-            </MenuItem>
-        </Menu>
-
+        <local:FileMenuView Grid.Row="0" />
         <local:TrackerView Grid.Row="1"  DataContext="{Binding Tracker}"/>
         <local:NotesDisplay Grid.Row="2" DataContext="{Binding NotesDisplay}"/>
+        
     </Grid>
 </Window>
