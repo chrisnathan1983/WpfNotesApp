@@ -9,7 +9,7 @@ using System.Windows.Input;
 using WpfNotesApp.Models;
 
 namespace WpfNotesApp.ViewModels {
-    public class NotesDisplayViewModel : INotifyPropertyChanged {
+    public class GroupViewModel : INotifyPropertyChanged {
         private string _newNoteText; // Property for the new note text box
 
         // This collection will be bound to your ItemsControl in MainWindow.xaml
@@ -30,7 +30,7 @@ namespace WpfNotesApp.ViewModels {
         }
 
 
-        public NotesDisplayViewModel() {
+        public GroupViewModel() {
             // Initialize the collection
             Notes = new ObservableCollection<NoteViewModel>();
 

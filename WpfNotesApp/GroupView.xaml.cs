@@ -12,17 +12,16 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
-using WpfNotesApp.ViewModels;
 using WpfNotesApp.AttachedProperties;
+using WpfNotesApp.ViewModels;
 
 namespace WpfNotesApp {
     /// <summary>
-    /// Interaction logic for NotesDisplay.xaml
+    /// Interaction logic for GroupView.xaml
     /// </summary>
-    public partial class NotesDisplay : UserControl {
-        public NotesDisplay() {
+    public partial class GroupView : UserControl {
+        public GroupView() {
             InitializeComponent();
-            //DataContext = new NotesDisplayViewModel();
         }
 
         // --- Drag and Drop Logic ---
@@ -65,7 +64,7 @@ namespace WpfNotesApp {
                 NoteViewModel targetNote = (dropTarget as Border)?.Tag as NoteViewModel; // <-- Fix is here
 
                 if (droppedNote != null && targetNote != null && droppedNote != targetNote) {
-                    var viewModel = DataContext as NotesDisplayViewModel;
+                    var viewModel = DataContext as GroupViewModel;
                     if (viewModel != null) {
                         int oldIndex = viewModel.Notes.IndexOf(droppedNote);
                         int newIndex = viewModel.Notes.IndexOf(targetNote);

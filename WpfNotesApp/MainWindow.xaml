@@ -19,6 +19,8 @@
         </Grid.RowDefinitions>
         <local:FileMenuView Grid.Row="0"/>
         <local:TrackerView Grid.Row="1" DataContext="{Binding Tracker}"/>
-        <local:NotesDisplay Grid.Row="2" DataContext="{Binding NotesDisplay}"/>
+        <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
+            <local:GroupView DataContext="{Binding GroupView}"/>
+        </ScrollViewer>
     </Grid>
 </Window>

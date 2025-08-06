@@ -12,7 +12,7 @@ using WpfNotesApp.ViewModels;
 namespace WpfNotesApp.ViewModels {
     public class MainWindowViewModel : INotifyPropertyChanged {
         // This collection will be bound to your ItemsControl in MainWindow.xaml
-        public NotesDisplayViewModel NotesDisplay { get; set; }
+        public GroupViewModel GroupView { get; set; }
         public TrackerViewModel Tracker { get; set; }
 
         private string _currentFilePath;
@@ -55,13 +55,13 @@ namespace WpfNotesApp.ViewModels {
         public ICommand ExitApplicationCommand { get; private set; }
 
         public MainWindowViewModel() {
-            NotesDisplay = new NotesDisplayViewModel();
-            NotesDisplay.Notes.Add(new NoteViewModel(new Note { Text = "First note\nwith new line\nwith new line\nwith new line\nwith new line", IsMinimized = false }));
-            NotesDisplay.Notes.Add(new NoteViewModel(new Note { Text = "Second note", IsMinimized = false }));
+            GroupView = new GroupViewModel();
+            GroupView.Notes.Add(new NoteViewModel(new Note { Text = "First note\nwith new line\nwith new line\nwith new line\nwith new line", IsMinimized = false }));
+            GroupView.Notes.Add(new NoteViewModel(new Note { Text = "Second note", IsMinimized = false }));
 
             // Subscribe to events when the NotesDisplay is initialized
-            NotesDisplay.Notes.CollectionChanged += NotesCollection_CollectionChanged;
-            foreach (var note in NotesDisplay.Notes) {
+            GroupView.Notes.CollectionChanged += NotesCollection_CollectionChanged;
+            foreach (var note in GroupView.Notes) {
                 note.PropertyChanged += Note_PropertyChanged;
             }
 
@@ -88,7 +88,7 @@ namespace WpfNotesApp.ViewModels {
 
         private void NewFile() {
             // Clear all data
-            NotesDisplay.Notes.Clear();
+            GroupView.Notes.Clear();
             Tracker.RoomsSoldCount = 0;
             Tracker.AdultsCount = 0;
             Tracker.ChildrenCount = 0;
@@ -121,14 +121,14 @@ namespace WpfNotesApp.ViewModels {
                         }
 
                         // Clear existing notes and parse the rest of the file for notes
-                        NotesDisplay.Notes.Clear();
+                        GroupView.Notes.Clear();
                         // Join lines from the second line onwards, then split by double newline
                         string notesContent = parsed ? string.Join("\n", lines.Skip(2)) : string.Join("\n", lines);
                         string[] noteTexts = notesContent.Split(new string[] { "\n\n" }, System.StringSplitOptions.None);
 
                         foreach (var noteText in noteTexts) {
                             if (!string.IsNullOrEmpty(noteText.Trim())) { // Trim to handle empty lines from splitting
-                                NotesDisplay.Notes.Add(new NoteViewModel(new Note { Text = noteText, IsMinimized = false }));
+                                GroupView.Notes.Add(new NoteViewModel(new Note { Text = noteText, IsMinimized = false }));
                             }
                         }
                         IsUnsaved = false; // Reset unsaved state after loading
@@ -164,7 +164,7 @@ namespace WpfNotesApp.ViewModels {
                     string trackerData = $"{Tracker.RoomsSoldCount} ROOMS SOLD, {Tracker.AdultsCount} ADULTS, {Tracker.ChildrenCount} CHILDREN, {Tracker.ArrivalsCount} ARRIVALS";
 
                     // Construct the notes data string, separated by double newlines
-                    string notesData = string.Join("\n\n", NotesDisplay.Notes.Select(note => note.Text));
+                    string notesData = string.Join("\n\n", GroupView.Notes.Select(note => note.Text));
 
                     // Combine and save to the file
                     string fileContent = $"{trackerData}\n\n{notesData}";
