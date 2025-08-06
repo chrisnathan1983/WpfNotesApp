@@ -67,6 +67,9 @@
     <Compile Include="NotesDisplay.xaml.cs">
       <DependentUpon>NotesDisplay.xaml</DependentUpon>
     </Compile>
+    <Compile Include="NoteView.xaml.cs">
+      <DependentUpon>NoteView.xaml</DependentUpon>
+    </Compile>
     <Compile Include="TrackerView.xaml.cs">
       <DependentUpon>TrackerView.xaml</DependentUpon>
     </Compile>
@@ -95,6 +98,10 @@
       <SubType>Code</SubType>
     </Compile>
     <Page Include="NotesDisplay.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="NoteView.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

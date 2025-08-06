@@ -11,90 +11,41 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
+            <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
-        <Border Grid.Row="0" Background="#FF2E2E2E" BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Margin="0,0,0,2">
-            <StackPanel Orientation="Vertical" HorizontalAlignment="Stretch" >
-                <TextBlock Text="Type below and press enter to create a new note"
-                     Foreground="White"
-                     Margin="0,0,0,0"
-                     HorizontalAlignment="Center"/>
-                <TextBox Text="{Binding NewNoteText, UpdateSourceTrigger=PropertyChanged}"
-                     Height="35"
-                     VerticalAlignment="Center"
-                     Margin="20,0,20,0"
-                     Style="{StaticResource {x:Type TextBox}}">
-                        <TextBox.InputBindings>
-                            <KeyBinding Key="Enter" Command="{Binding NewNoteEnterKeyCommand}" />
-                            <KeyBinding Key="Tab" Command="{Binding NewNoteEnterKeyCommand}" />
-                        </TextBox.InputBindings>
-                </TextBox>
-            </StackPanel>
-        </Border>
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto">
-            <ItemsControl ItemsSource="{Binding Notes}"
+        <Border Background="#FF2E2E2E" BorderBrush="Gray" BorderThickness="2" CornerRadius="4" Margin="2,2,2,2">
+            <StackPanel Orientation="Vertical">
+                <TextBox Text="#UntaggedNotes"
+                           FontSize="16"
+                           FontWeight="Bold"
+                           Margin="20,0,0,0"
+                           HorizontalAlignment="Left"
+                           Foreground="White"/>
+                <ScrollViewer VerticalScrollBarVisibility="Auto">
+                    <ItemsControl ItemsSource="{Binding Notes}"
                           AllowDrop="True"
                           Drop="NotesItemsControl_Drop"
                           PreviewMouseMove="NotesItemsControl_PreviewMouseMove">
 
-                <ItemsControl.ItemTemplate>
-                    <DataTemplate DataType="{x:Type vm:NoteViewModel}">
-                        <Border Background="#FF2E2E2E" BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="1" Margin="0,0,0,0"
-                                MouseEnter="NoteBorder_MouseEnter"
-                                MouseLeave="NoteBorder_MouseLeave"
-                                Tag="{Binding}">
-
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="Auto"/>
-                                    <ColumnDefinition Width="*"/>
-                                    <ColumnDefinition Width="Auto"/>
-                                </Grid.ColumnDefinitions>
-
-                                <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Visibility="{Binding PanelVisibility}">
-                                    <Button Width="20" ToolTip="Drag to reorder"
-                                            Cursor="SizeAll"
-                                            ap:DragBehavior.IsDragSource="True"
-                                            Tag="{Binding}">
-                                        <Image Width="16" Height="16" Source="{StaticResource DragIcon}"/>
-                                    </Button>
-                                </StackPanel>
-
-                                <TextBox Grid.Column="1"
-                                         Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
-                                         BorderThickness="0"
-                                         VerticalAlignment="Center"
-                                         TextWrapping="{Binding TextWrappingMode}"
-                                         AcceptsReturn="{Binding AcceptsReturnMode}"
-                                         Height="{Binding TextBoxHeight}"
-                                         MinHeight="24"
-                                         ap:FocusBehavior.FocusOnLoad="{Binding IsFocused}" />
-
-                                <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding PanelVisibility}">
-                                    <Button Width="20" ToolTip="Minimize"
-                                            Command="{Binding DataContext.ToggleMinimizeCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}"
-                                            Visibility="{Binding ShowMinimizeButton}">
-                                        <Image Width="16" Height="16" Source="{StaticResource MinimizeIcon}"/>
-                                    </Button>
-
-                                    <Button Width="20" ToolTip="Copy"
-                                            Command="{Binding DataContext.CopyNoteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}">
-                                        <Image Width="16" Height="16" Source="{StaticResource CopyIcon}"/>
-                                    </Button>
-
-                                    <Button Width="20" ToolTip="Delete"
-                                            Command="{Binding DataContext.DeleteNoteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-                                            CommandParameter="{Binding}">
-                                        <Image Width="16" Height="16" Source="{StaticResource DeleteIcon}"/>
-                                    </Button>
-                                </StackPanel>
-                            </Grid>
-                        </Border>
-                    </DataTemplate>
-                </ItemsControl.ItemTemplate>
-            </ItemsControl>
-        </ScrollViewer>
+                        <ItemsControl.ItemTemplate>
+                            <DataTemplate DataType="{x:Type vm:NoteViewModel}">
+                                <local:NoteView />
+                            </DataTemplate>
+                        </ItemsControl.ItemTemplate>
+                    </ItemsControl>
+                </ScrollViewer>
+                <TextBox Text="{Binding NewNoteText, UpdateSourceTrigger=PropertyChanged}"
+                     Height="50"
+                     VerticalAlignment="Center"
+                     Margin="20,0,20,0"
+                     Style="{StaticResource {x:Type TextBox}}">
+                    <TextBox.InputBindings>
+                        <KeyBinding Key="Enter" Command="{Binding NewNoteCommand}" />
+                        <KeyBinding Key="Tab" Command="{Binding NewNoteCommand}" />
+                    </TextBox.InputBindings>
+                </TextBox>
+            </StackPanel>
+        </Border>
     </Grid>
 </UserControl>

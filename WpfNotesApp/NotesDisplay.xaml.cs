@@ -25,29 +25,6 @@ namespace WpfNotesApp {
             //DataContext = new NotesDisplayViewModel();
         }
 
-
-        private void NoteBorder_MouseEnter(object sender, MouseEventArgs e) {
-            // Explicitly cast sender to Border using 'as' operator
-            Border border = sender as Border;
-            if (border != null) {
-                NoteViewModel noteViewModel = border.DataContext as NoteViewModel;
-                if (noteViewModel != null) {
-                    noteViewModel.IsHovered = true;
-                }
-            }
-        }
-
-        private void NoteBorder_MouseLeave(object sender, MouseEventArgs e) {
-            // Explicitly cast sender to Border using 'as' operator
-            Border border = sender as Border; // <-- Fix is here
-            if (border != null) {
-                NoteViewModel noteViewModel = border.DataContext as NoteViewModel;
-                if (noteViewModel != null) {
-                    noteViewModel.IsHovered = false;
-                }
-            }
-        }
-
         // --- Drag and Drop Logic ---
 
         private void NotesItemsControl_PreviewMouseMove(object sender, MouseEventArgs e) {

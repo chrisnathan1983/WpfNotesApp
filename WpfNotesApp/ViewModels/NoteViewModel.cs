@@ -1,17 +1,22 @@
 ﻿// NoteViewModel.cs
 using System.ComponentModel;
-using WpfNotesApp.Models;
 using System.Windows; // Required for Visibility enum
+using System.Windows.Input;
+using WpfNotesApp.Models;
 
 namespace WpfNotesApp.ViewModels {
     public class NoteViewModel : INotifyPropertyChanged {
         private Note _note;
         private bool _isHovered; // New property to track hover state
         private bool _isFocused; // New property to track focus state
+        public ICommand ToggleMinimizeCommand { get; private set; }
+        public ICommand CopyNoteCommand { get; private set; } // New command for copying note text
 
         public NoteViewModel(Note note) {
             _note = note;
             _note.PropertyChanged += (sender, e) => OnPropertyChanged(e.PropertyName);
+            ToggleMinimizeCommand = new RelayCommand(ToggleMinimize);
+            CopyNoteCommand = new RelayCommand(CopyNote);
         }
 
         public string Text {
@@ -85,6 +90,14 @@ namespace WpfNotesApp.ViewModels {
                 bool noteTextIsMultiline = Text.Contains("\n") || Text.Length > 50;
                 return noteTextIsMultiline ? Visibility.Visible : Visibility.Collapsed;
             }
+        }
+
+        private void ToggleMinimize(object parameter) {
+            IsMinimized = !IsMinimized;
+        }
+
+        private void CopyNote(object parameter) {
+            Clipboard.SetText(_note.Text);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
