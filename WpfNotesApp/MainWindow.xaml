@@ -6,7 +6,7 @@
         xmlns:ap="clr-namespace:WpfNotesApp.AttachedProperties"
         Title="Notes" Height="600" Width="300" Background="#FF1E1E1E" Foreground="White"
         Closing="Window_Closing">
-    
+
     <Window.DataContext>
         <vm:MainWindowViewModel/>
     </Window.DataContext>
@@ -16,11 +16,33 @@
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
         <local:FileMenuView Grid.Row="0"/>
-        <local:TrackerView Grid.Row="1" DataContext="{Binding Tracker}"/>
+
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+            <local:TrackerView Grid.Column="0" DataContext="{Binding Tracker}"/>
+        </Grid>
+
         <ScrollViewer Grid.Row="2" VerticalScrollBarVisibility="Auto">
-            <local:GroupView DataContext="{Binding GroupView}"/>
+            <ItemsControl ItemsSource="{Binding Groups}">
+                <ItemsControl.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <StackPanel Orientation="Vertical"/>
+                    </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate>
+                        <local:GroupView/>
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
         </ScrollViewer>
+        <Button Grid.Row="3" Content="Add Group" Command="{Binding AddGroupCommand}" Margin="5" Padding="5"/>
+
     </Grid>
 </Window>

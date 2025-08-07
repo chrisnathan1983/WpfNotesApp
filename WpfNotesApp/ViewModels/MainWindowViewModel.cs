@@ -1,18 +1,19 @@
-﻿using Microsoft.Win32; // For OpenFileDialog and SaveFileDialog
+﻿using Microsoft.Win32;
 using System;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
-using System.IO; // For file I/O
+using System.IO;
 using System.Linq;
-using System.Windows; // For Application.Current.Shutdown()
+using System.Windows;
 using System.Windows.Input;
 using WpfNotesApp.Models;
 using WpfNotesApp.ViewModels;
+using System.Collections.Specialized;
 
 namespace WpfNotesApp.ViewModels {
     public class MainWindowViewModel : INotifyPropertyChanged {
         // This collection will be bound to your ItemsControl in MainWindow.xaml
-        public GroupViewModel GroupView { get; set; }
+        public ObservableCollection<GroupViewModel> Groups { get; set; }
         public TrackerViewModel Tracker { get; set; }
 
         private string _currentFilePath;
@@ -47,22 +48,32 @@ namespace WpfNotesApp.ViewModels {
             get => IsUnsaved ? $"{CurrentFileName}*" : CurrentFileName;
         }
 
-        // Commands for file operations
+        // Commands for file operations and adding groups
         public ICommand NewFileCommand { get; private set; }
         public ICommand OpenFileCommand { get; private set; }
         public ICommand SaveFileCommand { get; private set; }
         public ICommand SaveFileAsCommand { get; private set; }
         public ICommand ExitApplicationCommand { get; private set; }
+        public ICommand AddGroupCommand { get; private set; }
 
         public MainWindowViewModel() {
-            GroupView = new GroupViewModel("#Untagged");
-            GroupView.AddNote("First note\nwith new line\nwith new line\nwith new line\nwith new line");
-            GroupView.AddNote("Second note");
+            // Initialize the collection of groups
+            Groups = new ObservableCollection<GroupViewModel>();
+            var untaggedGroup = new GroupViewModel("#Untagged");
+            untaggedGroup.AddNote("First note\nwith new line\nwith new line\nwith new line\nwith new line");
+            untaggedGroup.AddNote("Second note");
+            Groups.Add(untaggedGroup);
+
+            // Add another sample group to demonstrate multiple groups
+            var workGroup = new GroupViewModel("Work Tasks");
+            workGroup.AddNote("Finish WPF app refactoring");
+            workGroup.AddNote("Write documentation");
+            Groups.Add(workGroup);
 
             // Subscribe to events when the NotesDisplay is initialized
-            GroupView.Notes.CollectionChanged += NotesCollection_CollectionChanged;
-            foreach (var note in GroupView.Notes) {
-                note.PropertyChanged += Note_PropertyChanged;
+            Groups.CollectionChanged += Groups_CollectionChanged;
+            foreach (var group in Groups) {
+                SubscribeToGroupEvents(group);
             }
 
             Tracker = new TrackerViewModel();
@@ -77,18 +88,36 @@ namespace WpfNotesApp.ViewModels {
             // Initialize commands
             NewFileCommand = new RelayCommand(_ => NewFile());
             OpenFileCommand = new RelayCommand(_ => OpenFile());
-            SaveFileCommand = new RelayCommand(_ => SaveFile(false)); // False means not "Save As"
-            SaveFileAsCommand = new RelayCommand(_ => SaveFile(true)); // True means "Save As"
+            SaveFileCommand = new RelayCommand(_ => SaveFile(false));
+            SaveFileAsCommand = new RelayCommand(_ => SaveFile(true));
             ExitApplicationCommand = new RelayCommand(_ => ExitApplication());
+            AddGroupCommand = new RelayCommand(_ => AddNewGroup());
 
             // Set initial file name
             CurrentFileName = "File";
             IsUnsaved = true;
         }
 
+        // Helper method to subscribe to events for a new group and its notes
+        private void SubscribeToGroupEvents(GroupViewModel group) {
+            group.Notes.CollectionChanged += NotesCollection_CollectionChanged;
+            foreach (var note in group.Notes) {
+                note.PropertyChanged += Note_PropertyChanged;
+            }
+        }
+
+        // Helper method to unsubscribe from events for a removed group and its notes
+        private void UnsubscribeFromGroupEvents(GroupViewModel group) {
+            group.Notes.CollectionChanged -= NotesCollection_CollectionChanged;
+            foreach (var note in group.Notes) {
+                note.PropertyChanged -= Note_PropertyChanged;
+            }
+        }
+
         private void NewFile() {
-            // Clear all data
-            GroupView.Notes.Clear();
+            // Clear all data and create a new default group
+            Groups.Clear();
+            Groups.Add(new GroupViewModel("#Untagged"));
             Tracker.RoomsSoldCount = 0;
             Tracker.AdultsCount = 0;
             Tracker.ChildrenCount = 0;
@@ -96,6 +125,10 @@ namespace WpfNotesApp.ViewModels {
             _currentFilePath = null;
             CurrentFileName = "File";
             IsUnsaved = false;
+        }
+
+        private void AddNewGroup() {
+            Groups.Add(new GroupViewModel("New Group"));
         }
 
         private void OpenFile() {
@@ -120,15 +153,18 @@ namespace WpfNotesApp.ViewModels {
                             Tracker.ArrivalsCount = int.Parse(trackerParts[3].Trim().Split(' ')[0]);
                         }
 
-                        // Clear existing notes and parse the rest of the file for notes
-                        GroupView.Notes.Clear();
+                        // Clear existing groups and create a new one with the file name
+                        Groups.Clear();
+                        var newGroup = new GroupViewModel(CurrentFileName);
+                        Groups.Add(newGroup);
+
                         // Join lines from the second line onwards, then split by double newline
                         string notesContent = parsed ? string.Join("\n", lines.Skip(2)) : string.Join("\n", lines);
                         string[] noteTexts = notesContent.Split(new string[] { "\n\n" }, System.StringSplitOptions.None);
 
                         foreach (var noteText in noteTexts) {
                             if (!string.IsNullOrEmpty(noteText.Trim())) { // Trim to handle empty lines from splitting
-                                GroupView.Notes.Add(new NoteViewModel(new Note { Text = noteText, IsMinimized = false }));
+                                newGroup.Notes.Add(new NoteViewModel(new Note { Text = noteText, IsMinimized = false }));
                             }
                         }
                         IsUnsaved = false; // Reset unsaved state after loading
@@ -158,13 +194,16 @@ namespace WpfNotesApp.ViewModels {
                 }
             }
 
-            if (!string.IsNullOrEmpty(_currentFilePath)) {
+            if (!string.IsNullOrEmpty(_currentFilePath) && Groups.Any()) {
                 try {
+                    // For now, only the first group is saved to the file.
+                    var firstGroup = Groups.First();
+
                     // Construct the tracker data string
                     string trackerData = $"{Tracker.RoomsSoldCount} ROOMS SOLD, {Tracker.AdultsCount} ADULTS, {Tracker.ChildrenCount} CHILDREN, {Tracker.ArrivalsCount} ARRIVALS";
 
                     // Construct the notes data string, separated by double newlines
-                    string notesData = string.Join("\n\n", GroupView.Notes.Select(note => note.Text));
+                    string notesData = string.Join("\n\n", firstGroup.Notes.Select(note => note.Text));
 
                     // Combine and save to the file
                     string fileContent = $"{trackerData}\n\n{notesData}";
@@ -206,6 +245,24 @@ namespace WpfNotesApp.ViewModels {
             }
         }
 
+        // Handles changes to the main Groups collection
+        private void Groups_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e) {
+            IsUnsaved = true;
+
+            if (e.NewItems != null) {
+                foreach (GroupViewModel group in e.NewItems) {
+                    SubscribeToGroupEvents(group);
+                }
+            }
+
+            if (e.OldItems != null) {
+                foreach (GroupViewModel group in e.OldItems) {
+                    UnsubscribeFromGroupEvents(group);
+                }
+            }
+        }
+
+        // Handles changes to the notes collection within a specific group
         private void NotesCollection_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e) {
             IsUnsaved = true;
 
