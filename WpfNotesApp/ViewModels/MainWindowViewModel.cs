@@ -55,9 +55,9 @@ namespace WpfNotesApp.ViewModels {
         public ICommand ExitApplicationCommand { get; private set; }
 
         public MainWindowViewModel() {
-            GroupView = new GroupViewModel();
-            GroupView.Notes.Add(new NoteViewModel(new Note { Text = "First note\nwith new line\nwith new line\nwith new line\nwith new line", IsMinimized = false }));
-            GroupView.Notes.Add(new NoteViewModel(new Note { Text = "Second note", IsMinimized = false }));
+            GroupView = new GroupViewModel("#Untagged");
+            GroupView.AddNote("First note\nwith new line\nwith new line\nwith new line\nwith new line");
+            GroupView.AddNote("Second note");
 
             // Subscribe to events when the NotesDisplay is initialized
             GroupView.Notes.CollectionChanged += NotesCollection_CollectionChanged;

@@ -17,7 +17,7 @@
         </Grid.RowDefinitions>
         <Border Background="#FF2E2E2E" BorderBrush="Gray" BorderThickness="2" CornerRadius="4" Margin="2,2,2,2">
             <StackPanel Orientation="Vertical">
-                <TextBox Text="#UntaggedNotes"
+                <TextBox Text="{Binding Name}"
                            FontWeight="Bold"
                            Margin="20,0,0,0"
                            HorizontalAlignment="Left"

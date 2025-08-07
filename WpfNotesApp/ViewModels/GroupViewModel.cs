@@ -10,6 +10,7 @@ using WpfNotesApp.Models;
 
 namespace WpfNotesApp.ViewModels {
     public class GroupViewModel : INotifyPropertyChanged {
+        private string _name; // Property for the group name
         private string _newNoteText; // Property for the new note text box
 
         // This collection will be bound to your ItemsControl in MainWindow.xaml
@@ -19,6 +20,15 @@ namespace WpfNotesApp.ViewModels {
         public ICommand DeleteNoteCommand { get; private set; }
         public ICommand NewNoteCommand { get; private set; } // Command for Enter key in new note box
 
+        public string Name {
+            get => _name;
+            set {
+                if (_name != value) {
+                    _name = value;
+                    OnPropertyChanged(nameof(Name));
+                }
+            }
+        }
         public string NewNoteText {
             get => _newNoteText;
             set {
@@ -39,9 +49,25 @@ namespace WpfNotesApp.ViewModels {
             NewNoteCommand = new RelayCommand(CreateNoteFromTextBox);
         }
 
-        private void CreateNoteFromTextBox(object parameter) {
-            if (!string.IsNullOrWhiteSpace(NewNoteText)) {
-                var newNote = new NoteViewModel(new Note { Text = NewNoteText, IsMinimized = false });
+
+        public GroupViewModel(string name) {
+            // Initialize the group name
+            Name = name;
+            // Initialize the collection
+            Notes = new ObservableCollection<NoteViewModel>();
+
+            // Initialize commands
+            DeleteNoteCommand = new RelayCommand<NoteViewModel>(DeleteNote);
+            NewNoteCommand = new RelayCommand(CreateNoteFromTextBox);
+        }
+
+        public void AddNote(string noteText) => CreateNote(noteText);
+
+        private void CreateNoteFromTextBox(object parameter) => CreateNote(NewNoteText);
+
+        private void CreateNote(string noteText) {
+            if (!string.IsNullOrWhiteSpace(noteText)) {
+                var newNote = new NoteViewModel(new Note { Text = noteText, IsMinimized = false });
                 Notes.Add(newNote);
                 NewNoteText = ""; // Clear the textbox after creating a note
                 newNote.IsFocused = true; // Set focus on the new note
