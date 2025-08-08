@@ -10,9 +10,9 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
     <Border BorderBrush="Gray" BorderThickness="1" CornerRadius="4" Padding="1" Margin="0,0,0,0"
-MouseEnter="NoteBorder_MouseEnter"
-MouseLeave="NoteBorder_MouseLeave"
-Tag="{Binding}">
+            MouseEnter="NoteBorder_MouseEnter"
+            MouseLeave="NoteBorder_MouseLeave"
+            Tag="{Binding}">
 
         <Grid>
             <Grid.ColumnDefinitions>
@@ -23,40 +23,45 @@ Tag="{Binding}">
 
             <StackPanel Grid.Column="0" Orientation="Horizontal" HorizontalAlignment="Left" Visibility="{Binding PanelVisibility}">
                 <Button Width="20" ToolTip="Drag to reorder"
-            Cursor="SizeAll"
-            ap:DragBehavior.IsDragSource="True"
-            Tag="{Binding}">
+                        Cursor="SizeAll"
+                        ap:DragBehavior.IsDragSource="True"
+                        Tag="{Binding}"
+                        Background="{Binding DataContext.GroupColor, RelativeSource={RelativeSource AncestorType=local:GroupView}}">
                     <Image Width="16" Height="16" Source="{StaticResource DragIcon}"/>
                 </Button>
             </StackPanel>
 
             <TextBox Grid.Column="1"
-         Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
-         BorderThickness="0"
-         VerticalAlignment="Center"
-         TextWrapping="{Binding TextWrappingMode}"
-         AcceptsReturn="{Binding AcceptsReturnMode}"
-         Height="{Binding TextBoxHeight}"
-         MinHeight="24"
-         ap:FocusBehavior.FocusOnLoad="{Binding IsFocused}" />
+                     Text="{Binding Text, UpdateSourceTrigger=PropertyChanged}"
+                     BorderThickness="0"
+                     VerticalAlignment="Center"
+                     TextWrapping="{Binding TextWrappingMode}"
+                     AcceptsReturn="{Binding AcceptsReturnMode}"
+                     Height="{Binding TextBoxHeight}"
+                     MinHeight="24"
+                     ap:FocusBehavior.FocusOnLoad="{Binding IsFocused}" 
+                     Background="{Binding DataContext.GroupColor, RelativeSource={RelativeSource AncestorType=local:GroupView}}"/>
 
             <StackPanel Grid.Column="2" Orientation="Horizontal" HorizontalAlignment="Right" Visibility="{Binding PanelVisibility}">
                 <Button Width="20" ToolTip="Minimize"
-            Command="{Binding ToggleMinimizeCommand}"
-            CommandParameter="{Binding}"
-            Visibility="{Binding ShowMinimizeButton}">
+                        Command="{Binding ToggleMinimizeCommand}"
+                        CommandParameter="{Binding}"
+                        Visibility="{Binding ShowMinimizeButton}"
+                        Background="{Binding DataContext.GroupColor, RelativeSource={RelativeSource AncestorType=local:GroupView}}">
                     <Image Width="16" Height="16" Source="{StaticResource MinimizeIcon}"/>
                 </Button>
 
                 <Button Width="20" ToolTip="Copy"
-            Command="{Binding CopyNoteCommand}"
-            CommandParameter="{Binding}">
+                        Command="{Binding CopyNoteCommand}"
+                        CommandParameter="{Binding}"
+                        Background="{Binding DataContext.GroupColor, RelativeSource={RelativeSource AncestorType=local:GroupView}}">
                     <Image Width="16" Height="16" Source="{StaticResource CopyIcon}"/>
                 </Button>
 
                 <Button Width="20" ToolTip="Delete"
-            Command="{Binding DataContext.DeleteNoteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
-            CommandParameter="{Binding}">
+                        Command="{Binding DataContext.DeleteNoteCommand, RelativeSource={RelativeSource AncestorType=ItemsControl}}"
+                        CommandParameter="{Binding}"
+                        Background="{Binding DataContext.GroupColor, RelativeSource={RelativeSource AncestorType=local:GroupView}}">
                     <Image Width="16" Height="16" Source="{StaticResource DeleteIcon}"/>
                 </Button>
             </StackPanel>
