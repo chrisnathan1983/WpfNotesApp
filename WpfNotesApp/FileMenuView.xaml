@@ -32,12 +32,6 @@
                     <Image Source="{StaticResource SaveFileAs}" Width="16" Height="16"/>
                 </MenuItem.Icon>
             </MenuItem>
-            <Separator/>
-            <MenuItem Header="Exit" Command="{Binding ExitApplicationCommand}">
-                <MenuItem.Icon>
-                    <Image Source="{StaticResource CloseFile}" Width="16" Height="16"/>
-                </MenuItem.Icon>
-            </MenuItem>
         </MenuItem>
     </Menu>
 </UserControl>

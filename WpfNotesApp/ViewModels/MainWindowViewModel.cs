@@ -18,6 +18,7 @@ namespace WpfNotesApp.ViewModels {
 
         private string _currentFilePath;
         private string _currentFileName;
+        private GroupViewModel _untaggedGroup;
 
         // Property to display the current file name in the menu
         public string CurrentFileName {
@@ -57,12 +58,15 @@ namespace WpfNotesApp.ViewModels {
         public ICommand AddGroupCommand { get; private set; }
 
         public MainWindowViewModel() {
-            // Initialize the collection of groups
-            Groups = new ObservableCollection<GroupViewModel>();
-            var untaggedGroup = new GroupViewModel("#Untagged");
-            untaggedGroup.AddNote("First note\nwith new line\nwith new line\nwith new line\nwith new line");
-            untaggedGroup.AddNote("Second note");
-            Groups.Add(untaggedGroup);
+            InitializeFileMenu();
+            InitializeTracker();
+            InitializeGroups();
+            TestData();
+        }
+
+        private void TestData() {
+            _untaggedGroup.AddNote("First note\nwith new line\nwith new line\nwith new line\nwith new line");
+            _untaggedGroup.AddNote("Second note");
 
             // Add another sample group to demonstrate multiple groups
             var workGroup = new GroupViewModel("Work Tasks");
@@ -76,21 +80,31 @@ namespace WpfNotesApp.ViewModels {
                 SubscribeToGroupEvents(group);
             }
 
-            Tracker = new TrackerViewModel();
             Tracker.RoomsSoldCount = 30;
             Tracker.AdultsCount = 45;
             Tracker.ChildrenCount = 0;
             Tracker.ArrivalsCount = 20;
+        }
+
+        private void InitializeGroups() {
+            Groups = new ObservableCollection<GroupViewModel> {
+                (_untaggedGroup = new GroupViewModel("Untagged"))
+            };
+        }
+
+        private void InitializeTracker() {
+            Tracker = new TrackerViewModel();
 
             // Subscribe to Tracker property changes
             Tracker.PropertyChanged += Tracker_PropertyChanged;
+        }
 
+        private void InitializeFileMenu() {
             // Initialize commands
             NewFileCommand = new RelayCommand(_ => NewFile());
             OpenFileCommand = new RelayCommand(_ => OpenFile());
             SaveFileCommand = new RelayCommand(_ => SaveFile(false));
             SaveFileAsCommand = new RelayCommand(_ => SaveFile(true));
-            ExitApplicationCommand = new RelayCommand(_ => ExitApplication());
             AddGroupCommand = new RelayCommand(_ => AddNewGroup());
 
             // Set initial file name
@@ -117,7 +131,7 @@ namespace WpfNotesApp.ViewModels {
         private void NewFile() {
             // Clear all data and create a new default group
             Groups.Clear();
-            Groups.Add(new GroupViewModel("#Untagged"));
+            Groups.Add(new GroupViewModel("Untagged"));
             Tracker.RoomsSoldCount = 0;
             Tracker.AdultsCount = 0;
             Tracker.ChildrenCount = 0;
