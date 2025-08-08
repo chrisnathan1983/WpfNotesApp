@@ -9,40 +9,43 @@
              d:DataContext="{d:DesignInstance Type=vm:GroupViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
-        <Border Background="#FF2E2E2E" BorderBrush="Gray" BorderThickness="2" CornerRadius="4" Margin="2,2,2,2">
-            <StackPanel Orientation="Vertical">
-                <TextBox Text="{Binding Name}"
+    <Border Background="{Binding GroupColor}" BorderBrush="Gray" BorderThickness="2" CornerRadius="4" Margin="2,2,2,2">
+        <StackPanel Orientation="Vertical">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBox Grid.Column="0" Text="{Binding Name}"
                            FontWeight="Bold"
                            Margin="20,0,0,0"
-                           HorizontalAlignment="Left"
-                           Foreground="White"/>
-                <ItemsControl ItemsSource="{Binding Notes}"
+                           VerticalAlignment="Center"
+                           Foreground="White"
+                         Background="{Binding GroupColor}"
+                         />
+                <Button Grid.Column="1" Margin="5" Background="{Binding GroupColor}" Content="🎨" ToolTip="Change Color" Command="{Binding ToggleColorCommand}"/>
+            </Grid>
+            <ItemsControl ItemsSource="{Binding Notes}"
                           AllowDrop="True"
                           Drop="NotesItemsControl_Drop"
                           PreviewMouseMove="NotesItemsControl_PreviewMouseMove">
-                    <ItemsControl.ItemTemplate>
-                        <DataTemplate DataType="{x:Type vm:NoteViewModel}">
-                            <local:NoteView />
-                        </DataTemplate>
-                    </ItemsControl.ItemTemplate>
-                </ItemsControl>
-                <TextBox Text="{Binding NewNoteText, UpdateSourceTrigger=PropertyChanged}"
+                <ItemsControl.ItemTemplate>
+                    <DataTemplate DataType="{x:Type vm:NoteViewModel}">
+                        <local:NoteView />
+                    </DataTemplate>
+                </ItemsControl.ItemTemplate>
+            </ItemsControl>
+            <TextBox Text="{Binding NewNoteText, UpdateSourceTrigger=PropertyChanged}"
                      Height="50"
                      VerticalAlignment="Center"
                      Margin="20,0,20,0"
-                     Style="{StaticResource {x:Type TextBox}}">
-                    <TextBox.InputBindings>
-                        <KeyBinding Key="Enter" Command="{Binding NewNoteCommand}" />
-                        <KeyBinding Key="Tab" Command="{Binding NewNoteCommand}" />
-                    </TextBox.InputBindings>
-                </TextBox>
-            </StackPanel>
-        </Border>
-    </Grid>
+                     Style="{StaticResource {x:Type TextBox}}"
+                         Background="{Binding GroupColor}">
+                <TextBox.InputBindings>
+                    <KeyBinding Key="Enter" Command="{Binding NewNoteCommand}" />
+                    <KeyBinding Key="Tab" Command="{Binding NewNoteCommand}" />
+                </TextBox.InputBindings>
+            </TextBox>
+        </StackPanel>
+    </Border>
 </UserControl>

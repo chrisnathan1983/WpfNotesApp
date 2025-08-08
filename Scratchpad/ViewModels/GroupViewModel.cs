@@ -6,19 +6,31 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using System.Windows.Media; // Added for SolidColorBrush
 using Scratchpad.Models;
+using Scratchpad.ViewModels;
 
 namespace Scratchpad.ViewModels {
     public class GroupViewModel : INotifyPropertyChanged {
-        private string _name; // Property for the group name
-        private string _newNoteText; // Property for the new note text box
+        private string _name;
+        private string _newNoteText;
+        private SolidColorBrush _groupColor; // New property for the group's color
+        private SolidColorBrush[] _groupColors = new SolidColorBrush[] {
+            new SolidColorBrush(Color.FromArgb(255, 46, 46, 46)), // Default color
+            new SolidColorBrush(Color.FromArgb(255, 255, 0, 0)), // Red
+            new SolidColorBrush(Color.FromArgb(255, 0, 255, 0)), // Green
+            new SolidColorBrush(Color.FromArgb(255, 0, 0, 255)), // Blue
+            new SolidColorBrush(Color.FromArgb(255, 255, 255, 0)), // Yellow
+            new SolidColorBrush(Color.FromArgb(255, 255, 165, 0)), // Orange
+            new SolidColorBrush(Color.FromArgb(255, 128, 0, 128)) // Purple
+        };
+        private int _currentColorIndex = 0; // Index to track the current color
 
-        // This collection will be bound to your ItemsControl in MainWindow.xaml
         public ObservableCollection<NoteViewModel> Notes { get; set; }
 
-        // Commands for UI interactions
         public ICommand DeleteNoteCommand { get; private set; }
-        public ICommand NewNoteCommand { get; private set; } // Command for Enter key in new note box
+        public ICommand NewNoteCommand { get; private set; }
+        public ICommand ToggleColorCommand { get; private set; }
 
         public string Name {
             get => _name;
@@ -39,26 +51,33 @@ namespace Scratchpad.ViewModels {
             }
         }
 
-
-        public GroupViewModel() {
-            // Initialize the collection
-            Notes = new ObservableCollection<NoteViewModel>();
-
-            // Initialize commands
-            DeleteNoteCommand = new RelayCommand<NoteViewModel>(DeleteNote);
-            NewNoteCommand = new RelayCommand(CreateNoteFromTextBox);
+        // New property for the group's color, with a default value
+        public SolidColorBrush GroupColor {
+            get => _groupColor;
+            set {
+                if (_groupColor != value) {
+                    _groupColor = value;
+                    OnPropertyChanged(nameof(GroupColor));
+                }
+            }
         }
 
 
-        public GroupViewModel(string name) {
-            // Initialize the group name
-            Name = name;
-            // Initialize the collection
-            Notes = new ObservableCollection<NoteViewModel>();
+        public GroupViewModel() {
+            Initialize();
+        }
 
-            // Initialize commands
+        public GroupViewModel(string name) {
+            Name = name;
+            Initialize();
+        }
+
+        private void Initialize() {
+            Notes = new ObservableCollection<NoteViewModel>();
             DeleteNoteCommand = new RelayCommand<NoteViewModel>(DeleteNote);
             NewNoteCommand = new RelayCommand(CreateNoteFromTextBox);
+            GroupColor = new SolidColorBrush(Color.FromArgb(255, 46, 46, 46)); // Default color
+            ToggleColorCommand = new RelayCommand(ToggleColor); // Initialize the toggle color command
         }
 
         public void AddNote(string noteText) => CreateNote(noteText);
@@ -69,8 +88,8 @@ namespace Scratchpad.ViewModels {
             if (!string.IsNullOrWhiteSpace(noteText)) {
                 var newNote = new NoteViewModel(new Note { Text = noteText, IsMinimized = false });
                 Notes.Add(newNote);
-                NewNoteText = ""; // Clear the textbox after creating a note
-                newNote.IsFocused = true; // Set focus on the new note
+                NewNoteText = "";
+                newNote.IsFocused = true;
             }
         }
 
@@ -78,6 +97,12 @@ namespace Scratchpad.ViewModels {
             if (noteToDelete != null) {
                 Notes.Remove(noteToDelete);
             }
+        }
+
+        private void ToggleColor(object parameter) {
+            // Logic to toggle color can be added here if needed
+            _currentColorIndex = (_currentColorIndex + 1) % _groupColors.Length;
+            GroupColor = _groupColors[_currentColorIndex];
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
